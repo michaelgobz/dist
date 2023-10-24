@@ -2,7 +2,7 @@
     """
 import math
 import matplotlib.pyplot as plt
-from dist.distribution import Distribution
+from ..distribution import Distribution
 
 
 class Gaussian(Distribution):

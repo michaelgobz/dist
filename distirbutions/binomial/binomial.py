@@ -1,6 +1,6 @@
 import math
 import matplotlib.pyplot as plt
-from .Generaldistribution import Distribution
+from ..distribution import Distribution
 
 
 class Binomial(Distribution):
@@ -46,11 +46,10 @@ class Binomial(Distribution):
         #
         #       Hint: You need to define the calculate_mean() and calculate_stdev() methods
         #               farther down in the code starting in line 55.
-        #               The init function can get access to these methods via the self
+        #              The init function can get access to these methods via the self
         #               variable.
-        pass
-        self.prob = prob
-        self.size = size
+        self.p = prob
+        self.n = size
 
     def calculate_mean(self):
         """Function to calculate the mean from p and n
@@ -66,7 +65,8 @@ class Binomial(Distribution):
         # TODO: calculate the mean of the Binomial distribution. Store the mean
         #       via the self variable and also return the new mean value
 
-        pass
+        self.mean = self.p * self.n
+        return self.mean
 
     def calculate_stdev(self):
         """Function to calculate the standard deviation from p and n.
@@ -82,9 +82,10 @@ class Binomial(Distribution):
         # TODO: calculate the standard deviation of the Binomial distribution. Store
         #       the result in the self standard deviation attribute. Return the value
         #       of the standard deviation.
-        pass
+        self.stdev = math.sqrt(self.n * self.p * (1 - self.p))
+        return self.stdev
 
-    def replace_stats_with_data(self):
+    def replace_stats_with_data(self, file_name):
         """Function to calculate p and n from the data set
 
         Args: 
@@ -96,8 +97,8 @@ class Binomial(Distribution):
 
         """
 
-        # TODO: The read_data_file() from the Generaldistribution class can read in a data
-        #       file. Because the Binomaildistribution class inherits from the Generaldistribution class,
+        # TODO: The read_data_file() from the General  distribution class can read in a data
+        #       file. Because the Binomail distribution class inherits from the Generaldistribution class,
         #       you don't need to re-write this method. However,  the method
         #       doesn't update the mean or standard deviation of
         #       a distribution. Hence you are going to write a method that calculates n, p, mean and
@@ -113,7 +114,21 @@ class Binomial(Distribution):
         #
         #       Hint: You can use the calculate_mean() and calculate_stdev() methods
         #           defined previously.
-        pass
+        self.read_data_file(file_name)
+        
+        self.n = len(self.data)
+        count = 0
+        for i in self.data:
+            if i == 1:
+                count += 1
+            else:
+                continue
+        self.p = count / self.n
+        
+        self.mean = self.calculate_mean()
+        self.stdev = self.calculate_stdev()
+            
+        
 
     def plot_bar(self):
         """Function to output a histogram of the instance variable data using 
@@ -137,7 +152,7 @@ class Binomial(Distribution):
         #       1 on the x-axis and 20 on the y-axis
 
         #       Make sure to label the chart with a title, x-axis label and y-axis label
-        pass
+        plt.bar(x = [0,1], height = [self.n - self.mean, self.mean])
 
     def pdf(self, k):
         """Probability density function calculator for the gaussian distribution.
